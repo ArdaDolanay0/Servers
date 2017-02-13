@@ -29,16 +29,18 @@ public class Server extends JFrame {
         super("Instant Messenger");
         field = new JTextField();
         field.setEditable(false);
+        
         field.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sendMessage(e.getActionCommand());
+                sendIt(e.getActionCommand());
                 field.setText("");
             }
 
         });
         add(field, BorderLayout.NORTH);
         fieldArea = new JTextArea();
+        fieldArea.setEditable(false);
         add(new JScrollPane(fieldArea));
         setSize(500, 500);
         setVisible(true);
@@ -65,7 +67,7 @@ public class Server extends JFrame {
     }
 
     private void waitForConnection() throws IOException {
-        showIt("waiting for connection");
+        showIt("Waiting for connection.....");
         connection = sock.accept();
         showIt("Now connected to " + connection.getInetAddress().getHostName());
     }
@@ -86,7 +88,7 @@ public class Server extends JFrame {
                 words = (String) inStream.readObject();
                 showIt(words);
             } catch (ClassNotFoundException exe) {
-                showIt("Message couldn't send")
+                showIt("Message couldn't send");
             }
         } while (!words.equals("CLINT-END"));
     }
@@ -104,11 +106,33 @@ public class Server extends JFrame {
     }
 
     private void sendIt(String mess) {
-        try{
-            outStream.writeObject("SERVER- "+mess);
-        }catch(IOException exe){
+        try {
+            outStream.writeObject("SERVER- " + mess);
+        } catch (IOException exe) {
             fieldArea.append("\n ERROR: can't send message");
         }
 
+    }
+
+    private void showIt(final String it) {
+        SwingUtilities.invokeLater(
+                new Runnable() {
+            @Override
+            public void run() {
+             fieldArea.append(it);
+            }
+        }
+        );
+
+    }
+    private void ableToType(final boolean condition){
+        SwingUtilities.invokeLater(
+                new Runnable() {
+            @Override
+            public void run() {
+             field.setEditable(condition);
+            }
+        }
+        );
     }
 }

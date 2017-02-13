@@ -5,6 +5,8 @@
  */
 package javaapplication;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author test
@@ -15,7 +17,9 @@ public class JavaApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        Server newServer = new Server();
+        newServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newServer.startRunning();
     }
     
 }
